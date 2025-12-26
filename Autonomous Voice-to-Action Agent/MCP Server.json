@@ -1,0 +1,150 @@
+{
+  "name": "MCP Server",
+  "nodes": [
+    {
+      "parameters": {
+        "sendTo": "faramarz.aghajani1808@gmail.com",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        32
+      ],
+      "id": "7cbe39d4-822d-412b-816e-c677475dba62",
+      "name": "Send a message in Gmail",
+      "webhookId": "bbc86eb9-8d15-4b00-a9e1-f48ee6e16bd2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "F3oOE9ZZISNTC8hT",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-1003532986599",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegramTool",
+      "typeVersion": 1.2,
+      "position": [
+        592,
+        32
+      ],
+      "id": "af78951d-0cdc-4b34-bab4-ba47927b68e5",
+      "name": "Send a text message in Telegram",
+      "webhookId": "9ce65372-7f7b-41a6-bc79-039eaf76d0b9",
+      "credentials": {
+        "telegramApi": {
+          "id": "Y6SzVP6CRz9tIcsc",
+          "name": "Telegram account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "38e97103-8ebe-42ee-a6b9-b751510373b6"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        688,
+        -176
+      ],
+      "id": "c95df1ab-ddda-41bd-b26e-02b2ed85aa28",
+      "name": "MCP Server Trigger",
+      "webhookId": "38e97103-8ebe-42ee-a6b9-b751510373b6"
+    },
+    {
+      "parameters": {
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+      "typeVersion": 1,
+      "position": [
+        928,
+        32
+      ],
+      "id": "5e435d72-7077-488f-a547-2ea7019dba13",
+      "name": "Search in Tavily",
+      "credentials": {
+        "tavilyApi": {
+          "id": "btw3fQuQOSaP01YP",
+          "name": "Tavily account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## MCP Server\n\nSend message in Telegram Channel\n\nSend Email to Specific gmail address\n\nSearch in web with Tavily",
+        "height": 400,
+        "width": 720
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        336,
+        -208
+      ],
+      "id": "5f45ef56-bb78-48ac-b745-8ff3e0573434",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message in Telegram": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search in Tavily": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a1de1ad1-5160-4561-a16c-06942d0026f8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "197c10183acd0be1e0ced8ad68e956847779fe6358e374795bcedc52d2374519"
+  },
+  "id": "MAcHEVgdE16wx4wT",
+  "tags": []
+}

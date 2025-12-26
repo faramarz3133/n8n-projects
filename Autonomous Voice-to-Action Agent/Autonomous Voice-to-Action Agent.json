@@ -1,0 +1,176 @@
+{
+  "name": "Autonomous Voice-to-Action Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        448
+      ],
+      "id": "43ea2b46-c5ba-4a79-9794-a9fdb9b578c3",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HvCKYc5uTGCTMSMu",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "998c0ac4-1c7e-4078-b127-c840a225b788",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        240
+      ],
+      "id": "28eb1f84-1066-477b-834f-e145ec831ea5",
+      "name": "Webhook",
+      "webhookId": "998c0ac4-1c7e-4078-b127-c840a225b788"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        400,
+        240
+      ],
+      "id": "bc0602bf-590b-47f7-99ff-22522ee80907",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://amoferi.app.n8n.cloud/mcp/38e97103-8ebe-42ee-a6b9-b751510373b6",
+        "include": "selected",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        496
+      ],
+      "id": "a4acb7d4-4665-4e5a-aaaa-6edca6bc81ab",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "content": "## ElevenLabs Agent\n\nGet user request from ElevenLabs \nagent with webhook",
+        "height": 256,
+        "width": 416,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        128
+      ],
+      "id": "ba4f9a50-5354-4d72-9ca5-843d531184ad",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.User_Request }}",
+        "options": {
+          "systemMessage": "You are a helpful assistant.\n\n##MCP Client\nyou can use MCP Client to use tools.\nin MCP Client there are these tools:\n\n## \"Send a message in Gmail\" tool \nto send email.\n\n## \"Send a text message in Telegram\" tool \nto send message in telegram channel.\n\n## \"Search in web\" tool\nto search about something in web"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        80,
+        240
+      ],
+      "id": "d0664e7a-ff8b-40be-83e7-7c9bc0f0bde9",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "content": "## MCP Client\n\nBy connecting to MCP,\nthe agent will have the capabilities of :\nsending messages in the Telegram channel\nsending emails\nand searching the web.",
+        "height": 192,
+        "width": 448,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        272,
+        448
+      ],
+      "id": "77916b38-bd71-4daf-a4e3-98eaf1c0d244",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "92f5b47b-9daa-45de-9a21-c79fdaaac57d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "197c10183acd0be1e0ced8ad68e956847779fe6358e374795bcedc52d2374519"
+  },
+  "id": "TlB5lpQ1antkhEEl",
+  "tags": []
+}
