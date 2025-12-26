@@ -3,6 +3,10 @@
 An intelligent orchestration system that captures voice requests via **ElevenLabs**, processes them using **Google Gemini**, and executes actions through the **Model Context Protocol (MCP)**.
 
 ---
+<img width="1395" height="597" alt="Autonomous Voice-to-Action Agent" src="https://github.com/user-attachments/assets/4b8ab921-8cf9-44ca-afef-310ce77ca9da" />
+
+<img width="967" height="536" alt="MCP Server" src="https://github.com/user-attachments/assets/63ccc877-f460-48ab-b8c7-0aa5c64e15f3" />
+
 
 ## 📋 How It Works
 
@@ -46,3 +50,4 @@ The agent is equipped with the following capabilities:
 
 3. **MCP Servers:**
    - Ensure your MCP servers for Gmail, Telegram, and Web Search are active and linked to the **MCP Client** node URL in the workflow.
+
