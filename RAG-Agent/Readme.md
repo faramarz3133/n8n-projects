@@ -5,7 +5,12 @@ The project consists of two specialized workflows:
 
 The Query Engine (Main Agent): Handles user interactions via text and voice.
 
+<img width="1669" height="540" alt="RAG-Agent" src="https://github.com/user-attachments/assets/4e4f4760-a34a-4edf-95a0-517b8b62fa4f" />
+
 The Ingestion Pipeline: Automates the loading and vectorization of new documents into the database.
+
+<img width="761" height="478" alt="add file to PGVector Store" src="https://github.com/user-attachments/assets/38332cb7-6747-4ce4-978b-b55bfc3da3b1" />
+
 
 🏗 System Architecture
 1. Main Query Workflow (Rag.json)
@@ -55,5 +60,6 @@ Step 2: Querying the Bot
 Start the Rag workflow.
 
 Send a text message or a voice note to the Telegram Bot.
+
 
 The bot will search the PGVector Store, retrieve the relevant facts, and provide a grounded response based on the uploaded files.
