@@ -1,0 +1,484 @@
+{
+  "name": "RAG-Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -800,
+        48
+      ],
+      "id": "2a127028-3a3f-4b62-9100-50580f9809c3",
+      "name": "Telegram Trigger",
+      "webhookId": "53bb2558-3359-491b-9e21-1e47fc3bc4e9",
+      "credentials": {
+        "telegramApi": {
+          "id": "lzpMlM4ZssMTGzC1",
+          "name": "Telegram account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "=تو دستیار هوشمند و پشتیبان اختصاصی «آکادمی تک‌نو» هستی. هدف تو کمک به دانشجویان و مراجعین برای یافتن دقیق‌ترین پاسخ‌ها درباره دوره‌ها، قوانین و خدمات آکادمی است.\n\nقوانین حیاتی عملکرد: ۱. هویت: خودت را همیشه به عنوان دستیار رسمی «تک‌نو» معرفی کن. ۲. منبع دانش: تنها منبع معتبر تو برای پاسخگویی، ابزار Postgres PGVector Store است. قبل از هر پاسخی، باید در این دیتابیس جستجو کنی. ۳. محدودیت اطلاعات: اگر پس از جستجو در دیتابیس، پاسخ سوال کاربر را پیدا نکردی، اجازه نداری از اطلاعات عمومی خودت جوابی بسازی. در این شرایط دقیقاً بگو: «کاربر گرامی، متأسفانه اطلاعات مربوط به این مورد در پایگاه دانش آکادمی موجود نیست. لطفاً برای دریافت پاسخ دقیق با شماره ۰۲۱۱۲۳۴۵۶۷۸ تماس بگیرید یا موضوع را از طریق تیکت پیگیری کنید.» ۴. دقت در جزئیات: اطلاعاتی مثل هزینه‌ها، مهلت‌های زمانی (مثلاً ۷۲ ساعت برای عودت وجه) و شرایط گواهینامه را دقیقاً همان‌طور که در دیتابیس آمده نقل کن. ۵. لحن: لحن تو باید صمیمی، راهنما و در عین حال کاملاً حرفه‌ای باشد."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        320,
+        48
+      ],
+      "id": "5e28a308-41b8-45c5-b931-a4c69e92f6fc",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "8f15a702-75dd-4ab2-89b2-79a2df5a0741"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "03f2bee2-726a-421a-8e43-a4576380051c",
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -576,
+        48
+      ],
+      "id": "142aa865-9290-40e3-b829-d71bef2901bf",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "64548b30-3d37-4039-a785-03bfde93d236",
+              "name": "text",
+              "value": "={{ $('Telegram Trigger').item.json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "a9a906e7-dc67-41c8-97c3-e8dc98a44770",
+              "name": "sessionId",
+              "value": "1",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        96,
+        -48
+      ],
+      "id": "3d57e750-c7c6-4f6b-ade8-b61e329184d5",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -352,
+        144
+      ],
+      "id": "63e44a2c-36e1-4895-a788-e0ed73704d50",
+      "name": "Get a file",
+      "webhookId": "d6c06a88-035e-4457-aca0-bb3140fb8e49",
+      "credentials": {
+        "telegramApi": {
+          "id": "lzpMlM4ZssMTGzC1",
+          "name": "Telegram account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        144
+      ],
+      "id": "ae47f1c5-0fdb-4a55-a6ad-4bfffcda3aef",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "x3AKq8yT8PtcmQTz",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7b31d185-c1c4-4cae-a412-ce7a70350864",
+              "name": "text",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "130a9474-6531-4724-86af-d25ed76b8029",
+              "name": "sessionId",
+              "value": "1",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        96,
+        144
+      ],
+      "id": "1007fc09-540b-41ab-91d3-181e07a07495",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        912,
+        48
+      ],
+      "id": "d54622ad-bd54-47ff-b2cf-418cab21cb03",
+      "name": "Send a text message",
+      "webhookId": "96a83195-d05f-4dd3-b3e1-885fe87000bb",
+      "credentials": {
+        "telegramApi": {
+          "id": "lzpMlM4ZssMTGzC1",
+          "name": "Telegram account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        224,
+        272
+      ],
+      "id": "31bc0d35-d4b7-444c-b13d-1b07b54121a2",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HvCKYc5uTGCTMSMu",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        368,
+        272
+      ],
+      "id": "4d323ed2-97ec-4e2c-9b17-8d7eaf92fd46",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "867DThSCR0FFnl8T",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { output: $input.first().json.output.replace(/[().]/g, \" \") } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        48
+      ],
+      "id": "6eae87ed-e886-4b74-b5e6-44b345884da5",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "information about doctor ahmadi",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        272
+      ],
+      "id": "0c553af7-a1f6-4984-a567-3b5475fdfe1f",
+      "name": "Postgres PGVector Store",
+      "credentials": {
+        "postgres": {
+          "id": "867DThSCR0FFnl8T",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        432
+      ],
+      "id": "8b027c8a-42bd-40ac-9179-3e1dfa352749",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HvCKYc5uTGCTMSMu",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres PGVector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Postgres PGVector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "18e06aa1-1dc1-466c-a26e-517f1c4a7e22",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "197c10183acd0be1e0ced8ad68e956847779fe6358e374795bcedc52d2374519"
+  },
+  "id": "xMWJBh87Y9g6NEYE",
+  "tags": []
+}
