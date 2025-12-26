@@ -46,18 +46,3 @@ The agent is equipped with the following capabilities:
 
 3. **MCP Servers:**
    - Ensure your MCP servers for Gmail, Telegram, and Web Search are active and linked to the **MCP Client** node URL in the workflow.
-
----
-
-## 📂 Repository Contents
-
-- `Autonomous_Voice-to-Action_Agent.json`: The complete n8n workflow file.
-- `README.md`: Project documentation.
-
----
-
-### 👤 Author
-**[Your Name]**
-*AI Automation Specialist & Workflow Developer*
-
-[LinkedIn Link] | [Portfolio Link]
